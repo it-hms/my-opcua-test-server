@@ -27,18 +27,21 @@ class TestServer:
         self.server.set_server_name("OPC-UA Test Server")
         uri = "https://github.com/it-hms/my-opcua-test-server"
         self.idx = await self.server.register_namespace(uri)
-        self.simulator = await self.server.nodes.objects.add_object(self.idx, 'Simulator')
+        self.top = await self.server.nodes.objects.add_object(self.idx, 'Dynamic')
         self.vars = []
         for i in range(3):
-            tvar = await self.simulator.add_variable(self.idx, f"sim_var_{i}", 0)
+            tvar = await self.top.add_variable(self.idx, f"Random.Int{i}", 0)
             self.vars.append(tvar)
 
     async def run(self):
         async with self.server:
             while True:
+                i = 0
                 for var in self.vars:
-                    await var.write_value(random.gauss(3, 1))
+                    await var.write_value(int(random.gauss(i*10, 9)))
+                    i += 1
                     await asyncio.sleep(1)
+                
 
 
 async def main():
