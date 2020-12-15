@@ -11,4 +11,4 @@ gcc
 python3-dev
 libffi-dev
 libssl-dev
-
+pyhton3-venv
